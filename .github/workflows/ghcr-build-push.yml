@@ -1,7 +1,8 @@
 name: Build and push container image to GHCR
 
 on:
-  workflow_call:
+  release:
+    types: [released]
 
 env:
   IMAGE: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}
@@ -23,10 +24,10 @@ jobs:
         with:
           images: ${{ env.IMAGE }}
           tags: |
-            # "latest" only on default branch
-            type=raw,value=latest,enable={{is_default_branch}}
-            # otherwise branch name
-            type=ref,event=branch
+            # release tag (e.g. v1.0.0)
+            type=ref,event=tag
+            # always latest
+            type=raw,value=latest
 
   build:
     needs: metadata
