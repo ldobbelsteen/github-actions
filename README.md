@@ -20,7 +20,7 @@ permissions:
 
 jobs:
   release:
-    uses: ldobbelsteen/github-actions/.github/workflows/create-release.yml@v1
+    uses: ldobbelsteen/github-actions/.github/workflows/create-release.yml@main
 ```
 
 ### ghcr-build-push
@@ -40,6 +40,6 @@ permissions:
 
 jobs:
   build:
-    uses: ldobbelsteen/github-actions/.github/workflows/ghcr-build-push.yml@v1
+    uses: ldobbelsteen/github-actions/.github/workflows/ghcr-build-push.yml@main
 ```
 
