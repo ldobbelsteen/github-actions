@@ -21,7 +21,22 @@ permissions:
 jobs:
   release:
     uses: ldobbelsteen/github-actions/.github/workflows/create-release.yml@main
+    secrets: inherit
 ```
+
+Releases created with the default `GITHUB_TOKEN` do not trigger downstream workflows (GitHub's anti-recursion rule). To chain `create-release` -> `build-image`, create a fine-grained PAT and add it as a repository secret named `RELEASE_TOKEN` in each consuming repo.
+
+1. Go to **GitHub -> Settings -> Developer settings -> Personal access tokens -> Fine-grained tokens -> Generate new token**
+2. **Resource owner:** your user or organization
+3. **Repository access:** select the consuming repo (or "All repositories")
+4. **Permissions -> Repository permissions:**
+   - **Contents:** Read and write
+5. Generate and copy the token
+6. In the consuming repo: **Settings -> Secrets and variables -> Actions -> New repository secret**
+   - **Name:** `RELEASE_TOKEN`
+   - **Value:** the token from step 5
+
+The `release` caller passes `secrets: inherit`, so `create-release.yml` picks up `RELEASE_TOKEN` automatically. If unset, it falls back to `GITHUB_TOKEN` (releases still get created, but `build-image` won't trigger).
 
 ### ghcr-build-push
 
